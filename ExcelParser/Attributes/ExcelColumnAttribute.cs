@@ -1,17 +1,12 @@
 namespace ExcelParser.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class ExcelColumnAttribute : Attribute
+public class ExcelColumnAttribute(string columnName) : Attribute
 {
-    public ExcelColumnAttribute(string columnName)
-    {
-        ColumnName = columnName;
-    }
-
     /// <summary>
     ///     The Excel column name to map from (case-insensitive)
     /// </summary>
-    public string ColumnName { get; }
+    public string ColumnName { get; } = columnName;
 
     /// <summary>
     ///     Whether to filter out null/empty values for this property
