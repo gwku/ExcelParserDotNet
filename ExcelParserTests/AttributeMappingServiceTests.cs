@@ -39,12 +39,12 @@ public class AttributeMappingServiceTests
         // Assert
         Assert.That(result, Is.Not.Null);
         Assert.That(result, Has.Count.EqualTo(1));
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result[0].Name, Is.EqualTo("John Doe"));
             Assert.That(result[0].Email, Is.EqualTo("john@example.com"));
             Assert.That(result[0].Age, Is.EqualTo(30));
-        });
+        }
     }
 
     [Test]
@@ -66,12 +66,12 @@ public class AttributeMappingServiceTests
 
         // Assert
         Assert.That(result, Has.Count.EqualTo(1));
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result[0].Name, Is.EqualTo("John Doe"));
             Assert.That(result[0].Email, Is.EqualTo("john@example.com"));
             Assert.That(result[0].Age, Is.EqualTo(30));
-        });
+        }
     }
 
     [Test]
@@ -171,11 +171,11 @@ public class AttributeMappingServiceTests
 
         // Assert
         Assert.That(result, Has.Count.EqualTo(1));
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result[0].Name, Is.EqualTo("John Doe"));
             Assert.That(result[0].Age, Is.EqualTo(0)); // Default value for int
-        });
+        }
     }
 
     [Test]
@@ -217,12 +217,12 @@ public class AttributeMappingServiceTests
 
         // Assert
         Assert.That(result, Has.Count.EqualTo(1));
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result[0].Name, Is.EqualTo("John Doe"));
             Assert.That(result[0].Email, Is.EqualTo(string.Empty)); // Default value
             Assert.That(result[0].Age, Is.EqualTo(0)); // Default value
-        });
+        }
     }
 
     [Test]
@@ -262,10 +262,10 @@ public class AttributeMappingServiceTests
     private class TestPersonDto
     {
         [ExcelColumn("Name", IsRequired = true, FilterNullOrEmpty = true)]
-        public string Name { get; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         [ExcelColumn("Email", FilterNullOrEmpty = true)]
-        public string Email { get; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
         [ExcelColumn("Age", FilterNullOrEmpty = true)]
         public int Age { get; set; }
