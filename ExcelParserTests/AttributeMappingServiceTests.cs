@@ -9,15 +9,15 @@ namespace ExcelParserTests;
 [TestFixture]
 public class AttributeMappingServiceTests
 {
-    private AttributeMappingService _mappingService;
-    private ILogger<AttributeMappingService> _mockLogger;
-
     [SetUp]
     public void Setup()
     {
         _mockLogger = Substitute.For<ILogger<AttributeMappingService>>();
         _mappingService = new AttributeMappingService(_mockLogger);
     }
+
+    private AttributeMappingService _mappingService;
+    private ILogger<AttributeMappingService> _mockLogger;
 
     [Test]
     public void MapToDto_WithValidData_MapsCorrectly()
@@ -55,8 +55,8 @@ public class AttributeMappingServiceTests
         {
             CreateDynamicData(new Dictionary<string, object>
             {
-                { "name", "John Doe" },  // lowercase
-                { "EMAIL", "john@example.com" },  // uppercase
+                { "name", "John Doe" }, // lowercase
+                { "EMAIL", "john@example.com" }, // uppercase
                 { "Age", 30 }
             })
         };
@@ -83,7 +83,7 @@ public class AttributeMappingServiceTests
             CreateDynamicData(new Dictionary<string, object>
             {
                 { "Name", "John Doe" },
-                { "Email", "" },  // Empty string should be filtered
+                { "Email", "" }, // Empty string should be filtered
                 { "Age", 30 }
             }),
             CreateDynamicData(new Dictionary<string, object>
@@ -110,7 +110,7 @@ public class AttributeMappingServiceTests
         {
             CreateDynamicData(new Dictionary<string, object>
             {
-                { "Email", "john@example.com" },  // Missing required Name
+                { "Email", "john@example.com" }, // Missing required Name
                 { "Age", 30 }
             }),
             CreateDynamicData(new Dictionary<string, object>
@@ -139,7 +139,7 @@ public class AttributeMappingServiceTests
             {
                 { "Name", "John Doe" },
                 { "Email", "john@example.com" },
-                { "Age", "30" }  // String that should convert to int
+                { "Age", "30" } // String that should convert to int
             })
         };
 
@@ -162,7 +162,7 @@ public class AttributeMappingServiceTests
             {
                 { "Name", "John Doe" },
                 { "Email", "john@example.com" },
-                { "Age", "invalid_number" }  // Cannot convert to int
+                { "Age", "invalid_number" } // Cannot convert to int
             })
         };
 
@@ -254,10 +254,7 @@ public class AttributeMappingServiceTests
     private static DynamicExcelData CreateDynamicData(Dictionary<string, object> data)
     {
         var dynamicData = new DynamicExcelData();
-        foreach (var kvp in data)
-        {
-            dynamicData.SetValue(kvp.Key, kvp.Value);
-        }
+        foreach (var kvp in data) dynamicData.SetValue(kvp.Key, kvp.Value);
         return dynamicData;
     }
 
@@ -265,10 +262,10 @@ public class AttributeMappingServiceTests
     private class TestPersonDto
     {
         [ExcelColumn("Name", IsRequired = true, FilterNullOrEmpty = true)]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; } = string.Empty;
 
         [ExcelColumn("Email", FilterNullOrEmpty = true)]
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; } = string.Empty;
 
         [ExcelColumn("Age", FilterNullOrEmpty = true)]
         public int Age { get; set; }
@@ -279,4 +276,4 @@ public class AttributeMappingServiceTests
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
     }
-} 
+}

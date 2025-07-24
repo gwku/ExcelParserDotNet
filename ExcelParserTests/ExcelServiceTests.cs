@@ -1,23 +1,22 @@
-using System.Text;
+using ClosedXML.Excel;
 using ExcelParser.Services;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using ClosedXML.Excel;
 
 namespace ExcelParserTests;
 
 [TestFixture]
 public class ExcelServiceTests
 {
-    private ExcelService _excelService;
-    private ILogger<ExcelService> _mockLogger;
-
     [SetUp]
     public void Setup()
     {
         _mockLogger = Substitute.For<ILogger<ExcelService>>();
         _excelService = new ExcelService(_mockLogger);
     }
+
+    private ExcelService _excelService;
+    private ILogger<ExcelService> _mockLogger;
 
     [Test]
     public async Task ParseAsync_WithValidExcelData_ReturnsCorrectData()
@@ -34,7 +33,6 @@ public class ExcelServiceTests
         Assert.That(result, Has.Count.EqualTo(2));
         Assert.Multiple(() =>
         {
-
             // First row
             Assert.That(result[0].Data["Name"], Is.EqualTo("John Doe"));
             Assert.That(result[0].Data["Age"], Is.EqualTo(30.0)); // Excel returns numbers as double
@@ -160,21 +158,21 @@ public class ExcelServiceTests
     {
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add("Sheet1");
-        
+
         // Headers
         worksheet.Cell(1, 1).Value = "Name";
         worksheet.Cell(1, 2).Value = "Age";
         worksheet.Cell(1, 3).Value = "Email";
-        
+
         // Data
         worksheet.Cell(2, 1).Value = "John Doe";
         worksheet.Cell(2, 2).Value = 30;
         worksheet.Cell(2, 3).Value = "john@example.com";
-        
+
         worksheet.Cell(3, 1).Value = "Jane Smith";
         worksheet.Cell(3, 2).Value = 25;
         worksheet.Cell(3, 3).Value = "jane@example.com";
-        
+
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
         return stream.ToArray();
@@ -184,20 +182,20 @@ public class ExcelServiceTests
     {
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add("Sheet1");
-        
+
         // Headers
         worksheet.Cell(1, 1).Value = "Name";
         worksheet.Cell(1, 2).Value = "Age";
         worksheet.Cell(1, 3).Value = "Email";
-        
+
         // Data
         worksheet.Cell(2, 1).Value = "John Doe";
         worksheet.Cell(2, 2).Value = 30;
         worksheet.Cell(2, 3).Value = "john@example.com";
-        
+
         // Empty row (row 3 is left empty)
         // Row 4 is also left empty
-        
+
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
         return stream.ToArray();
@@ -207,19 +205,19 @@ public class ExcelServiceTests
     {
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add("Sheet1");
-        
+
         // Headers
         worksheet.Cell(1, 1).Value = "Name";
         worksheet.Cell(1, 2).Value = "Age";
         worksheet.Cell(1, 3).Value = "IsActive";
         worksheet.Cell(1, 4).Value = "StartDate";
-        
+
         // Data with mixed types
         worksheet.Cell(2, 1).Value = "John Doe";
         worksheet.Cell(2, 2).Value = 30;
         worksheet.Cell(2, 3).Value = true;
         worksheet.Cell(2, 4).Value = new DateTime(2023, 1, 15);
-        
+
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
         return stream.ToArray();
@@ -229,15 +227,15 @@ public class ExcelServiceTests
     {
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add("Sheet1");
-        
+
         // Headers
         worksheet.Cell(1, 1).Value = "Name";
         worksheet.Cell(1, 2).Value = "Email";
-        
+
         // Data with null/empty values
         worksheet.Cell(2, 1).Value = "John Doe";
         // Cell 2,2 (Email) is left empty
-        
+
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
         return stream.ToArray();
@@ -247,18 +245,18 @@ public class ExcelServiceTests
     {
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add("Sheet1");
-        
+
         // Headers - some empty
         worksheet.Cell(1, 1).Value = "Name";
         // Cell 1,2 is left empty (empty header)
         // Cell 1,3 is left empty (empty header)
-        
+
         // Data
         worksheet.Cell(2, 1).Value = "John Doe";
         // Cells 2,2 and 2,3 correspond to empty headers
-        
+
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
         return stream.ToArray();
     }
-} 
+}

@@ -11,10 +11,6 @@ namespace ExcelParserTests;
 [TestFixture]
 public class ExcelParseControllerTests
 {
-    private ExcelParseController _controller;
-    private IExcelService _mockExcelService;
-    private IMappingService _mockMappingService;
-
     [SetUp]
     public void Setup()
     {
@@ -28,6 +24,10 @@ public class ExcelParseControllerTests
     {
         _controller.Dispose();
     }
+
+    private ExcelParseController _controller;
+    private IExcelService _mockExcelService;
+    private IMappingService _mockMappingService;
 
     [TestFixture]
     public class ParseExcelTests : ExcelParseControllerTests
@@ -48,7 +48,8 @@ public class ExcelParseControllerTests
         public async Task ParseExcel_WithEmptyFile_ReturnsBadRequest()
         {
             // Arrange
-            var mockFile = CreateMockFile("test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 0);
+            var mockFile = CreateMockFile("test.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 0);
 
             // Act
             var result = await _controller.ParseExcel(mockFile);
@@ -78,9 +79,10 @@ public class ExcelParseControllerTests
         public async Task ParseExcel_WithValidXlsxFile_ReturnsOkResult()
         {
             // Arrange
-            var mockFile = CreateMockFile("test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 100);
+            var mockFile = CreateMockFile("test.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 100);
             var mockDynamicData = CreateMockDynamicData();
-            
+
             _mockExcelService.ParseAsync(Arg.Any<Stream>()).Returns(mockDynamicData);
 
             // Act
@@ -89,10 +91,10 @@ public class ExcelParseControllerTests
             // Assert
             var okResult = result as OkObjectResult;
             Assert.That(okResult, Is.Not.Null);
-            
+
             var response = okResult.Value;
             Assert.That(response, Is.Not.Null);
-            
+
             // Verify service was called
             await _mockExcelService.Received(1).ParseAsync(Arg.Any<Stream>());
         }
@@ -103,7 +105,7 @@ public class ExcelParseControllerTests
             // Arrange
             var mockFile = CreateMockFile("test.xls", "application/vnd.ms-excel", 100);
             var mockDynamicData = CreateMockDynamicData();
-            
+
             _mockExcelService.ParseAsync(Arg.Any<Stream>()).Returns(mockDynamicData);
 
             // Act
@@ -112,7 +114,7 @@ public class ExcelParseControllerTests
             // Assert
             var okResult = result as OkObjectResult;
             Assert.That(okResult, Is.Not.Null);
-            
+
             // Verify service was called
             await _mockExcelService.Received(1).ParseAsync(Arg.Any<Stream>());
         }
@@ -137,7 +139,8 @@ public class ExcelParseControllerTests
         public async Task ParseAsPersons_WithEmptyFile_ReturnsBadRequest()
         {
             // Arrange
-            var mockFile = CreateMockFile("test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 0);
+            var mockFile = CreateMockFile("test.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 0);
 
             // Act
             var result = await _controller.ParseAsPersons(mockFile);
@@ -167,12 +170,13 @@ public class ExcelParseControllerTests
         public async Task ParseAsPersons_WithValidFile_ReturnsOkResult()
         {
             // Arrange
-            var mockFile = CreateMockFile("test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 100);
+            var mockFile = CreateMockFile("test.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 100);
             var mockDynamicData = CreateMockDynamicData();
             var mockPersonDtos = CreateMockPersonDtos();
-            
+
             _mockExcelService.ParseAsync(Arg.Any<Stream>()).Returns(mockDynamicData);
-            
+
             _mockMappingService.MapToDto<PersonDto>(mockDynamicData).Returns(mockPersonDtos);
 
             // Act
@@ -181,7 +185,7 @@ public class ExcelParseControllerTests
             // Assert
             var okResult = result as OkObjectResult;
             Assert.That(okResult, Is.Not.Null);
-            
+
             // Verify both services were called
             await _mockExcelService.Received(1).ParseAsync(Arg.Any<Stream>());
             _mockMappingService.Received(1).MapToDto<PersonDto>(mockDynamicData);
@@ -191,12 +195,13 @@ public class ExcelParseControllerTests
         public async Task ParseAsPersons_WithValidFile_ReturnsCorrectResponseStructure()
         {
             // Arrange
-            var mockFile = CreateMockFile("test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 100);
+            var mockFile = CreateMockFile("test.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 100);
             var mockDynamicData = CreateMockDynamicData();
             var mockPersonDtos = CreateMockPersonDtos();
-            
+
             _mockExcelService.ParseAsync(Arg.Any<Stream>()).Returns(mockDynamicData);
-            
+
             _mockMappingService.MapToDto<PersonDto>(mockDynamicData).Returns(mockPersonDtos);
 
             // Act
@@ -205,10 +210,10 @@ public class ExcelParseControllerTests
             // Assert
             var okResult = result as OkObjectResult;
             Assert.That(okResult, Is.Not.Null);
-            
+
             var response = okResult.Value;
             Assert.That(response, Is.Not.Null);
-            
+
             // Check response structure using reflection
             var responseType = response.GetType();
             var totalRowsProperty = responseType.GetProperty("TotalRows");
@@ -235,9 +240,9 @@ public class ExcelParseControllerTests
         mockFile.FileName.Returns(fileName);
         mockFile.ContentType.Returns(contentType);
         mockFile.Length.Returns(length);
-        
+
         mockFile.CopyToAsync(Arg.Any<Stream>(), Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
-        
+
         return mockFile;
     }
 
@@ -268,4 +273,4 @@ public class ExcelParseControllerTests
             }
         ];
     }
-} 
+}

@@ -88,4 +88,4 @@ public class ExcelColumnAttributeTests
         Assert.That(usageAttribute, Is.Not.Null);
         Assert.That(usageAttribute.ValidOn, Is.EqualTo(AttributeTargets.Property));
     }
-} 
+}
