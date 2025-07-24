@@ -221,22 +221,33 @@ public decimal Salary { get; set; }
 
 ```
 ExcelParser/
-├── Attributes/
-│   └── ExcelColumnAttribute.cs      # Custom attribute for column mapping
-├── Controllers/
-│   └── ExcelParseController.cs      # API endpoints
-├── Dtos/
-│   └── PersonDto.cs                 # Example DTO implementation
-├── Models/
-│   └── DynamicExcelData.cs          # Dynamic data container
-├── Services/
-│   ├── ExcelService.cs              # Core Excel parsing logic
-│   ├── AttributeMappingService.cs   # DTO mapping service
-│   └── Interfaces/
-│       ├── IExcelService.cs         # Excel service contract
-│       └── IMappingService.cs       # Mapping service contract
-├── Program.cs                       # Application entry point
-└── ExcelParser.csproj              # Project configuration
+├── ExcelParser/                     # Main Web API Project
+│   ├── Attributes/
+│   │   └── ExcelColumnAttribute.cs      # Custom attribute for column mapping
+│   ├── Controllers/
+│   │   └── ExcelParseController.cs      # API endpoints
+│   ├── Dtos/
+│   │   └── PersonDto.cs                 # Example DTO implementation
+│   ├── Models/
+│   │   └── DynamicExcelData.cs          # Dynamic data container
+│   ├── Services/
+│   │   ├── ExcelService.cs              # Core Excel parsing logic
+│   │   ├── AttributeMappingService.cs   # DTO mapping service
+│   │   └── Interfaces/
+│   │       ├── IExcelService.cs         # Excel service contract
+│   │       └── IMappingService.cs       # Mapping service contract
+│   ├── Program.cs                       # Application entry point
+│   ├── ExcelParser.csproj              # Project configuration
+│   ├── persons.xlsx                     # Sample Excel file for testing
+│   └── persons_wrong.xlsx               # Sample file with validation issues
+├── ExcelParserTests/                # NUnit Test Project
+│   ├── AttributeMappingServiceTests.cs  # Tests for DTO mapping functionality
+│   ├── ExcelColumnAttributeTests.cs     # Tests for attribute configuration
+│   ├── ExcelParseControllerTests.cs     # Tests for API endpoints
+│   ├── ExcelServiceTests.cs             # Tests for Excel parsing logic
+│   └── ExcelParserTests.csproj          # Test project configuration
+├── ExcelParser.sln                  # Solution file
+└── README.md                        # Project documentation
 ```
 
 ## 📦 Dependencies
